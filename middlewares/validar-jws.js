@@ -5,7 +5,7 @@ const validarJWT = (req,res,next)=>{
     if(!token) return res.status(401).send({msg: "No hay token en la petición"});
     try{
         const {id} =  jwt.verify(token, process.env.JWT_SECRET);
-        req.id = id;
+        req.uid = id;
         next();
 
     }catch(error){

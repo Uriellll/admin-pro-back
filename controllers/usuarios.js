@@ -3,9 +3,19 @@ const Usuario = require('../models/usuario');
 const bcrypt = require('bcryptjs');
 
 const getUsuarios = async (req,res)=>{
+    const desde = Number(req.query.desde) || 0;
     /* console.log(req.id); Aquí obtenemos el id que viene del Middleware validar-jws, podemos tener la data del middleare en en controlador*/ 
-    const usuarios = await Usuario.find();
-    return res.status(200).send({usuarios});
+    /* const usuarios = await Usuario.find()
+        .skip(desde)
+        .limit(5);
+    const total = await Usuario.count() */
+    const [usuarios,total]  =await Promise.all([
+        Usuario.find()
+        .skip(desde)
+        .limit(5),
+        Usuario.count()
+    ])
+    return res.status(200).send({ok:true,usuarios, total});
 
 }
 const crearUsuario = async (req,res)=>{
